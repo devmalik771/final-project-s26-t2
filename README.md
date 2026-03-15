@@ -14,7 +14,7 @@
 | Victor Wanjohi   | vwanjohi@seas.upenn.edu |
 
 
-**GitHub Repository URL:**
+**GitHub Repository URL:  [https://github.com/upenn-embedded/final-project-s26-t2]([https://github.com/upenn-embedded/final-project-s26-t2]())**
 
 **GitHub Pages Website URL:** [for final submission] 
 
