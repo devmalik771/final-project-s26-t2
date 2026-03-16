@@ -96,34 +96,37 @@ IR: Infrared. BLE: Bluetooth Low Energy. CRC: Cyclic Redundancy Check. PWM: Puls
 
 **5.2 Functionality**
 
-| ID     | Description                                                                                                                                                                                                              |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| SRS-01 | The IMU 3-axis acceleration will be measured with 16-bit depth every 100 milliseconds +/-10 milliseconds                                                                                                                 |
-| SRS-02 | The distance sensor shall operate and report values at least every .5 seconds.                                                                                                                                           |
-| SRS-03 | Upon non-nominal distance detected (i.e., the trap mechanism has changed at least 10 cm from the nominal range), the system shall be able to detect the change and alert the user in a timely manner (within 5 seconds). |
-| SRS-04 | Upon a request from the user, the system shall get an image from the internal camera and upload the image to the user system within 10s.                                                                                 |
-|        |                                                                                                                                                                                                                          |
-|        |                                                                                                                                                                                                                          |
-|        |                                                                                                                                                                                                                          |
-|        |                                                                                                                                                                                                                          |
-|        |                                                                                                                                                                                                                          |
+| ID     | Description                                                                                                                                                                                                                                                                                                   |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SRS-01 | The blaster firmware shall transmit a valid IR shot packet within 50 ms of a trigger press, containing a preamble, shooter ID (4 bits), team ID (2 bits), and CRC-8 checksum.                                                                                                                                 |
+| SRS-02 | The blaster firmware shall enforce a minimum inter-shot interval of 500 ms (±50 ms) to prevent shot spamming, blocking trigger input during the cooldown period.                                                                                                                                             |
+| SRS-03 | The blaster firmware shall decrement the ammo counter on each valid shot and block firing when ammo reaches zero. The LCD shall update the displayed ammo count within 100 ms of a shot.                                                                                                                      |
+| SRS-04 | The reload mechanic shall support two modes: (a) a continuous 10-second (±0.5 s) button hold, or (b) a shake-to-reload gesture detected by the MPU6050 (see SRS-09). For button reload, releasing early shall cancel the attempt. Successful reload via either method shall reset ammo to the maximum value. |
+| SRS-05 | The vest firmware shall validate incoming IR packets by checking carrier frequency presence, correct packet framing, and CRC integrity. Invalid packets shall be discarded without affecting game state.                                                                                                      |
+| SRS-06 | Upon a valid hit, the vest firmware shall enforce an invulnerability window of 2 seconds (±200 ms) during which additional hits are ignored, preventing double-counting from a single shot burst.                                                                                                            |
+| SRS-07 | The vest firmware shall transmit updated player status (health, eliminated flag) to the BLE module via UART within 500 ms of any game state change (hit received, elimination, reset).                                                                                                                        |
+| SRS-08 | Upon receiving a RESET command from the web app via BLE, both MCUs shall return to their initial ready state (full health, full ammo, ALIVE status) within 1 second.                                                                                                                                          |
+| SRS-09 | The blaster firmware shall read the MPU6050 accelerometer via I2C at a minimum rate of 20 Hz and detect a shake-to-reload gesture when acceleration exceeds 2g on any axis for at least 3 consecutive samples. The gesture shall initiate the reload sequence as an alternative to the button hold.           |
 
 ### 6. Hardware Requirements Specification (HRS)
 
 **6.1 Definitions, Abbreviations**
 
-Here, you will define any special terms, acronyms, or abbreviations you plan to use for hardware
+FOV: Field of View. dB: Decibels. SNR: Signal-to-Noise Ratio. PCB: Printed Circuit Board. LDO: Low Dropout Regulator. NPN: Negative-Positive-Negative (transistor type). BSS138: N-channel MOSFET used in level shifter circuits.
 
 **6.2 Functionality**
 
-| ID     | Description                                                                                                                        |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------- |
-| HRS-01 | A distance sensor shall be used for obstacle detection. The sensor shall detect obstacles at a maximum distance of at least 10 cm. |
-| HRS-02 | A noisemaker shall be inside the trap with a strength of at least 55 dB.                                                           |
-| HRS-03 | An electronic motor shall be used to reset the trap remotely and have a torque of 40 Nm in order to reset the trap mechanism.      |
-| HRS-04 | A camera sensor shall be used to capture images of the trap interior. The resolution shall be at least 480p.                       |
-
-### 7. Bill of Materials (BOM)
+| ID     | Description                                                                                                                                                                                                                                                                  |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| HRS-01 | The IR emitter circuit shall use an NPN transistor (2N2222 or equivalent) to drive a 940 nm IR LED at 100 mA, producing a 38 kHz (±1 kHz) modulated carrier signal detectable by a TSOP38238 receiver at a minimum range of 3 meters in indoor ambient lighting conditions. |
+| HRS-02 | The vest shall incorporate a minimum of two IR receiver modules (TSOP38238 or equivalent) providing front and rear hit detection coverage.                                                                                                                                   |
+| HRS-03 | The LCD display (ST7735 or equivalent, minimum 128x128 pixels, SPI interface) shall be visible to the player under normal indoor lighting and update at a minimum refresh rate of 5 fps for game state information.                                                          |
+| HRS-04 | The HM-10 BLE module (3.3V logic) shall connect to the vest MCU (5V logic) through a bidirectional logic level shifter on UART TX/RX lines at 9600 baud, and sustain a BLE link to the web app at distances up to 5 meters indoors.7. Bill of Materials (BOM)                |
+| HRS-05 | The piezo buzzers on both the blaster and vest shall produce audible feedback at a minimum of 65 dB at 30 cm distance, with distinct tones for shot fired, hit received, elimination, and reload complete events.HRS-06**HRS-06****HRS-06**                            |
+| HRS-06 | The blaster and vest shall each be powered by USB power banks providing 5V directly, with a minimum capacity of 5000 mAh supporting at least 60 minutes of continuous gameplay without requiring a recharge.                                                                 |
+| HRS-07 | Each ATmega328PB shall operate at 16 MHz with a 5V supply from the USB power bank. Each MCU VCC pin shall have a 100 nF ceramic decoupling capacitor to filter high-frequency noise. Total system current draw per subsystem shall not exceed 500 mA.                        |
+| HRS-08 | The LED feedback system on the vest shall provide visually distinct patterns for hit (flash), low health (pulsing), and eliminated (solid or rapid flash) states, visible from at least 2 meters in normal indoor lighting.                                                  |
+| HRS-09 | The MPU6050 IMU shall be mounted rigidly inside the blaster enclosure and communicate with the ATmega328PB over I2C at 400 kHz. The accelerometer shall be configured for a ±4g range with 16-bit resolution.                                                               |
 
 ### 8. Final Demo Goals
 
