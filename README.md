@@ -128,7 +128,27 @@ FOV: Field of View. dB: Decibels. SNR: Signal-to-Noise Ratio. PCB: Printed Circu
 | HRS-08 | The LED feedback system on the vest shall provide visually distinct patterns for hit (flash), low health (pulsing), and eliminated (solid or rapid flash) states, visible from at least 2 meters in normal indoor lighting.                                                  |
 | HRS-09 | The MPU6050 IMU shall be mounted rigidly inside the blaster enclosure and communicate with the ATmega328PB over I2C at 400 kHz. The accelerometer shall be configured for a ±4g range with 16-bit resolution.                                                               |
 
+### 7. Bill of Materials (BOM)
+
+| Component       | Part / Model                                          | Qty         | Unit Cost | Vendor    | Purpose                 |
+| --------------- | ----------------------------------------------------- | ----------- | --------- | --------- | ----------------------- |
+| Microcontroller | ATmega328PB                                           | **2** | Kit       | Lab / Kit | Blaster + Vest MCUs     |
+| LCD Display     | ST7735 1.8" TFT breakout (SPI, onboard level shifter) | 1           | ~$10      | Adafruit  | Blaster ammo display    |
+| IMU             | MPU6050 breakout (I2C, onboard LDO + level shifter)   | 1           | ~$4       | Adafruit  | Shake-to-reload gesture |
+| IR Emitter LED  | 940nm IR LED (5mm)                                    | 2           |           |           |                         |
+|                 |                                                       |             |           |           |                         |
+|                 |                                                       |             |           |           |                         |
+|                 |                                                       |             |           |           |                         |
+|                 |                                                       |             |           |           |                         |
+|                 |                                                       |             |           |           |                         |
+|                 |                                                       |             |           |           |                         |
+
+
+
+
+
 ### 8. Final Demo Goals
+
 
 ### 9. Sprint Planning
 
