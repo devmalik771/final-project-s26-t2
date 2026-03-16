@@ -72,9 +72,13 @@ Serial Communication (SPI + I2C + UART): LCD display over SPI, MPU6050 accelerom
 
 #### Blaster
 
+![1773623951391](image/README/1773623951391.png)
+
 Handheld enclosure (3D printed or laser-cut) housing the ATmega328PB on perfboard, IR LED at the barrel tip driven by a 2N2222 NPN transistor, trigger and reload buttons on the grip, an ST7735 LCD breakout on the back face visible to the shooter, an MPU6050 IMU breakout mounted inside for shake-to-reload detection, a piezo buzzer, and a shoot-indicator LED. Powered by a USB power bank (5V direct, no regulator needed). Decoupling capacitors on all IC power pins.
 
 #### Vest
+
+![1773624055043](image/README/1773624055043.png)
 
 A fabric vest or harness with 3D-printed/laser-cut mounting points for two IR receivers (front and back), WS2812B RGB LEDs for hit feedback visible to other players, a piezo buzzer for audio cues, and a small enclosure for the ATmega328PB, bidirectional level shifter, and HM-10 BLE module. Powered by a USB power bank (5V direct).
 
@@ -88,7 +92,7 @@ Laser cutting (RPL): potential flat panels for enclosure sides, vest backing pla
 
 **5.1 Definitions, Abbreviations**
 
-Here, you will define any special terms, acronyms, or abbreviations you plan to use for hardware
+IR: Infrared. BLE: Bluetooth Low Energy. CRC: Cyclic Redundancy Check. PWM: Pulse Width Modulation. SPI: Serial Peripheral Interface. I2C: Inter-Integrated Circuit. UART: Universal Asynchronous Receiver-Transmitter. IMU: Inertial Measurement Unit. HRS: Hardware Requirements Specification. LCD: Liquid Crystal Display. MCU: Microcontroller Unit.e
 
 **5.2 Functionality**
 
@@ -98,6 +102,11 @@ Here, you will define any special terms, acronyms, or abbreviations you plan to 
 | SRS-02 | The distance sensor shall operate and report values at least every .5 seconds.                                                                                                                                           |
 | SRS-03 | Upon non-nominal distance detected (i.e., the trap mechanism has changed at least 10 cm from the nominal range), the system shall be able to detect the change and alert the user in a timely manner (within 5 seconds). |
 | SRS-04 | Upon a request from the user, the system shall get an image from the internal camera and upload the image to the user system within 10s.                                                                                 |
+|        |                                                                                                                                                                                                                          |
+|        |                                                                                                                                                                                                                          |
+|        |                                                                                                                                                                                                                          |
+|        |                                                                                                                                                                                                                          |
+|        |                                                                                                                                                                                                                          |
 
 ### 6. Hardware Requirements Specification (HRS)
 
