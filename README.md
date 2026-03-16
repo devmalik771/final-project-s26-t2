@@ -82,6 +82,8 @@ Handheld enclosure (3D printed or laser-cut) housing the ATmega328PB on perfboar
 
 A fabric vest or harness with 3D-printed/laser-cut mounting points for two IR receivers (front and back), WS2812B RGB LEDs for hit feedback visible to other players, a piezo buzzer for audio cues, and a small enclosure for the ATmega328PB, bidirectional level shifter, and HM-10 BLE module. Powered by a USB power bank (5V direct).
 
+![1773653363737](image/README/1773653363737.png)
+
 #### Manufacturing
 
 3D printing (Tangen Hall / RPL): blaster enclosure, vest sensor mounts
