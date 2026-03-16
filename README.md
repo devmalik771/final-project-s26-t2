@@ -130,34 +130,63 @@ FOV: Field of View. dB: Decibels. SNR: Signal-to-Noise Ratio. PCB: Printed Circu
 
 ### 7. Bill of Materials (BOM)
 
-| Component       | Part / Model                                          | Qty         | Unit Cost | Vendor    | Purpose                 |
-| --------------- | ----------------------------------------------------- | ----------- | --------- | --------- | ----------------------- |
-| Microcontroller | ATmega328PB                                           | **2** | Kit       | Lab / Kit | Blaster + Vest MCUs     |
-| LCD Display     | ST7735 1.8" TFT breakout (SPI, onboard level shifter) | 1           | ~$10      | Adafruit  | Blaster ammo display    |
-| IMU             | MPU6050 breakout (I2C, onboard LDO + level shifter)   | 1           | ~$4       | Adafruit  | Shake-to-reload gesture |
-| IR Emitter LED  | 940nm IR LED (5mm)                                    | 2           |           |           |                         |
-|                 |                                                       |             |           |           |                         |
-|                 |                                                       |             |           |           |                         |
-|                 |                                                       |             |           |           |                         |
-|                 |                                                       |             |           |           |                         |
-|                 |                                                       |             |           |           |                         |
-|                 |                                                       |             |           |           |                         |
 
+| Component           | Part / Model                                          | Qty     | Unit Cost | Vendor             | Purpose                                |
+| ------------------- | ----------------------------------------------------- | ------- | --------- | ------------------ | -------------------------------------- |
+| Microcontroller     | ATmega328PB                                           | 2       | Kit       | Lab / Kit          | Blaster + Vest MCUs                    |
+| LCD Display         | ST7735 1.8" TFT breakout (SPI, onboard level shifter) | 1       | ~$10      | Adafruit           | Blaster ammo display                   |
+| IMU                 | MPU6050 breakout (I2C, onboard LDO + level shifter)   | 1       | ~$4       | Adafruit           | Shake-to-reload gesture                |
+| IR Emitter LED      | 940nm IR LED (5mm)                                    | 2       | ~$1       | Adafruit / DigiKey | Shot transmission                      |
+| NPN Transistor      | 2N2222 + 100Ω base resistor                          | 2       | ~$0.50    | Lab / DigiKey      | IR LED driver (100mA)                  |
+| IR Receiver         | TSOP38238 (38kHz)                                     | 3–4    | ~$2 ea    | Adafruit / DigiKey | Vest hit detection                     |
+| BLE Module          | HM-10 (3.3V UART)                                     | 1       | ~$6       | Amazon / Adafruit  | Vest-to-web-app link                   |
+| Logic Level Shifter | Bi-dir 3.3V/5V (BSS138)                               | 1       | ~$4       | Adafruit           | UART level shift for HM-10             |
+| Piezo Buzzer        | Passive piezo                                         | 2       | ~$1 ea    | Adafruit / DigiKey | Audio feedback                         |
+| RGB LEDs            | WS2812B strip                                         | 1 strip | ~$8       | Adafruit           | Vest hit/health feedback               |
+| Buttons             | Tactile pushbuttons                                   | 3–4    | ~$0.50 ea | Lab / DigiKey      | Trigger, reload, reset                 |
+| USB Power Banks     | 5V 2A output, 5000mAh+                                | 2       | ~$8 ea    | Amazon             | 5V power for each unit                 |
+| Passives + Misc     | 100nF caps, 220Ω/100Ω resistors, perfboard, wires   | —      | ~$10      | Lab / Kit          | Decoupling, current limiting, assembly |
 
-
-
+Estimated Total: ~$70–$90
 
 ### 8. Final Demo Goals
 
+On demo day, the system will be demonstrated as a live two-player laser tag match at a lab station in Detkin Lab. One team member will wear the vest and another will hold the blaster while someone else operates the web app on a laptop as the referee. The demo will follow this sequence:
+
+* Referee starts the match from the web app
+* Player fires the blaster at the vest, showing IR hit detection, LCD ammo decrement, and vest LED/buzzer feedback in real time
+* Player runs out of ammo and performs the shake-to-reload gesture (or 10-second button hold as fallback)
+* Vest player is eliminated (health reaches zero), vest shows elimination feedback, web app declares result
+* Referee resets the match from the web app, all devices return to ready state
+
+#### Constraints
+
+* Demo will be conducted at a single lab station (no outdoor space required)
+* IR range of ~3 meters is sufficient for the indoor demo area
+* All components are USB power bank powered for portability (no wall outlet dependency)
 
 ### 9. Sprint Planning
 
-| Milestone  | Functionality Achieved | Distribution of Work |
-| ---------- | ---------------------- | -------------------- |
-| Sprint #1  |                        |                      |
-| Sprint #2  |                        |                      |
-| MVP Demo   |                        |                      |
-| Final Demo |                        |                      |
+**Sprint Milestones**
+
+
+| Week          | Milestone                    | Key Tasks                                                                                                                                                           |
+| ------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Mar 16–22    | Parts Ordering + Prototyping | Finalize BOM, order parts, begin breadboard prototyping of IR emitter/receiver pair, set up ATmega328PB dev environments                                            |
+| Mar 23–30    | Subsystem Bringup            | IR TX/RX communication working, LCD displaying over SPI, BLE module pairing with test web page, buzzer tones verified. Parts ordering meeting with Account Manager. |
+| Mar 30–Apr 3 | Sprint 1: Core Firmware      | Blaster state machine (ammo, fire, reload), vest state machine (health, hits, invulnerability). IR packet protocol (encode/decode + CRC). Sprint Review #1.         |
+| Apr 4–10     | Sprint 2: Integration        | Integrate blaster and vest for end-to-end shot-hit cycle. BLE commands from web app controlling game state. Begin mechanical enclosure work. Sprint Review #2.      |
+| Apr 11–17    | MVP Demo                     | All electronics and firmware functional at basic level. Full match loop working (start, shoot, hit, eliminate, reset). Enclosures in progress. MVP Demo on Apr 17.  |
+| Apr 18–24    | Polish + Final Demo          | Finalize enclosures, polish web app UI, tune IR range/reliability, stress test full system. Final Demo Apr 24.                                                      |
+| Apr 25–27    | Final Report                 | Record demo video, write validation results for SRS/HRS, complete GitHub Pages website. Due Apr 27.                                                                 |
+
+
+| Member | Primary Responsibility                                    | Secondary                                    |
+| ------ | --------------------------------------------------------- | -------------------------------------------- |
+| Kim    | Blaster firmware (state machine, IR TX, LCD driver)       | IR protocol co-design                        |
+| Devan  | Vest firmware (hit detection, game logic, BLE UART)       | IR protocol co-design                        |
+| Marko  | Web app (BLE integration, match UI, referee controls)     | BLE protocol definition, integration testing |
+| Victor | Hardware & mechanical (circuits, power, enclosures, vest) | Integration, soldering, 3D print / laser cut |
 
 **This is the end of the Project Proposal section. The remaining sections will be filled out based on the milestone schedule.**
 
